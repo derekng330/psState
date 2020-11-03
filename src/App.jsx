@@ -13,6 +13,13 @@ export default function Product() {
   function addToCart(id, sku) {
     setCart((items) => {
       const itemInCart = items.find((i) => i.sku === sku);
+      if (itemInCart) {
+        return items.map((i) =>
+          i.sku === sku ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      } else {
+        return [...items, { id, sku, quantity: 1 }];
+      }
     });
   }
   return (
@@ -23,7 +30,10 @@ export default function Product() {
           <Routes>
             <Route path="/" element={<h1>Welcome to Carved RockFitness</h1>} />
             <Route path="/:category" element={<Products />} />
-            <Route path="/:category/:id" element={<Detail />} />
+            <Route
+              path="/:category/:id"
+              element={<Detail addToCart={addToCart} />}
+            />
             <Route path="/cart" element={<Cart />} />
           </Routes>
         </main>
